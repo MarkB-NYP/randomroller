@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!--Random Roller v1.0-->
+    <!--Have fun! Make crazy stuff!-->
+    <!--Copyright Mark Bosco 2022-->
+<head>
+    <meta charset="UTF-8">
+    <title>Randoms Generator v1.0</title>
+    
+    <style>
+        
+                * {
+        font-family:verdana;
+        text-align: center;
+        position: relative;
+        background-color:black;
+        color:white;
+   
+
+        }
+        
+              button {
+          margin-left:20px;
+                
+          background-color:#636363;
+        }
+
+        button:hover{
+          background-color:red;
+        }
+        
+        #add:hover{
+          background-color:#469110;
+        }
+        
+         #generate:hover{
+          background-color:saddlebrown;
+        }
+        
+        #g5:hover{background-color:silver;}
+        
+        #g10:hover{background-color:gold;}
+        
+        
+        input{
+
+            border:solid white;
+            
+        }
+        .instructions{
+            font-style: italic;
+ 
+        }
+        .paramInput{
+            margin-top:10px;
+            margin-bottom:10px;
+        }
+    </style>
+    
+    </head>
+
+<body>
+    
+    <h1>Make Amazing <br>Random Stuff.</h1>
+    <p class="instructions">Type possible options for each variable, separated by a comma (,)</p>
+    <div id='inputs'>
+
+    </div>
+<button id='add' onclick='addVar();'>+ Variable</button>
+    
+    
+    
+    <div id='divtemplate' style='padding-top:20px'>
+    <p class="instructions">Template Text:</p>
+    <textarea id="template" name="template" rows="4" cols="50">Your content goes here. Variable names like var1 will be replaced with a random item in the output.</textarea>
+        <br>
+    <button id='generate' onclick='generate(1);'>Generate(1)</button>
+        <button id='g5' onclick='generate(5);'>Generate(5)</button>
+        <button id='g10' onclick='generate(10);'>Generate(10)</button>
+    </div>
+    
+       <div id='outputdiv' style='padding-top:20px'>
+<p class="instructions">Output:</p>
+           
+           <p id='output'> </p>
+    </div>
+    
+    
+<script>
+    var inputs = document.getElementById('inputs');
+    var output = document.getElementById('output');
+    var vars = ['var1','var2','var3','var4','var5', 'var6'];
+    var taken = []
+    function createElementFromHTML(htmlString) {
+  var div = document.createElement('div');
+  div.innerHTML = htmlString.trim();
+
+  // Change this to div.childNodes to support multiple top-level nodes.
+  return div.firstChild;
+}
+    function addVar(){
+    vars.sort();
+        const template=`<div class="paramInput" id="div#">
+        <label for="#">#:</label>
+        <input size="30" placeholder="#" name="#" id="#">
+        
+        <button onclick="removeVar('div#');">X</button>
+    </div>`
+        r = vars.shift()
+        taken.push(r)
+        finalElement = template.replaceAll('#',r)
+        inputs.append(createElementFromHTML(finalElement));
+        if (vars.length == 0){
+            document.getElementById('add').style.visibility='hidden';
+        }
+        document.getElementById(r).focus();
+    }
+    
+    
+    function createElementFromHTML(htmlString) {
+  var div = document.createElement('div');
+  div.innerHTML = htmlString.trim();
+
+  // Change this to div.childNodes to support multiple top-level nodes.
+  return div.firstChild;
+}
+    
+    
+    function removeVar(name1){
+  
+        document.getElementById(name1).remove()
+        vars.push(name1.substr(3,));
+        document.getElementById('add').style.visibility= "visible";
+        vars.sort();
+        
+    }
+    
+    function generate(number){
+    output.innerHTML='';
+        for (let x = 0; x < number; x++){
+
+        template = document.getElementById('template').value;
+            
+        for (let i = 0; i < taken.length; i++) {
+            if (!vars.includes(taken[i])){ 
+            var varstr = document.getElementById(taken[i]).value.split(",");
+            var item = varstr[Math.floor(Math.random()*varstr.length)].trim();
+            
+            template = template.replaceAll(taken[i],item);
+            
+            console.log(output.innerHTML)
+                }
+        }
+        output.innerHTML+=(x+1).toString().concat(': ');
+        output.innerHTML+=template;
+        output.innerHTML+="<br><br>";
+        
+    }
+        
+        
+    window.scrollTo(0, document.body.scrollHeight);
+    }
+    
+    addVar();
+    document.getElementById('var1').value='Made, By, Mark, Bosco'
+    
+    
+    
+    
+    </script>
+    </body>
+
+</html>

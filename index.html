@@ -55,6 +55,14 @@
             margin-top:10px;
             margin-bottom:10px;
         }
+        
+        a:hover{
+            color:#469110;
+        }
+        
+        a{
+            text-decoration: underline
+        }
     </style>
     
     </head>
@@ -62,7 +70,8 @@
 <body>
     
     <h1>Random Roller</h1>
-    <a href="./index.html" download="RandomRoller.html">Download This Page!</a>
+    <a href="./index.html" download="RandomRoller.html">Download This Page!</a><br>
+    <a onclick='exportconfig()' href="#">Copy contents to clipboard</a>
     <p class="instructions">Type possible options for each variable, separated by a comma (,)</p>
     <div id='inputs'>
 
@@ -92,6 +101,7 @@
     var output = document.getElementById('output');
     var vars = ['var1','var2','var3','var4','var5', 'var6'];
     var taken = []
+    
     function createElementFromHTML(htmlString) {
   var div = document.createElement('div');
   div.innerHTML = htmlString.trim();
@@ -160,6 +170,24 @@
         
         
     window.scrollTo(0, document.body.scrollHeight);
+    }
+    
+    function exportconfig(){
+        template = document.getElementById('template').value;
+        options = '';
+                for (let i = 0; i < taken.length; i++) {
+            var varstr = document.getElementById(taken[i]).value
+            options += taken[i] + ': ' + varstr;
+        
+            
+        }
+        exportstr = `Random Roller export file\n========\nVARIABLES:\n${options}\n========\nTEMPLATE:\n${template}\n========\nOUTPUT:\n${output.innerHTML.replaceAll('<br>','\n')}\n========\nRandom Roller was created by Mark Bosco.`;
+        console.log(exportstr)
+         navigator.clipboard.writeText(exportstr);
+
+      /* Alert the copied text */
+      alert("Copied the text: " + exportstr);
+        
     }
     
     addVar();

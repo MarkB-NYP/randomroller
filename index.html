@@ -210,9 +210,9 @@
         templaten=x.split("========")[2].split("\n")[2];
         document.getElementById('var1').value=varsn[0].split(": ")[1];
         
-         for (let i = 2; i < varsn.length; i++) {
+         for (let i = 1; i < varsn.length-1; i++) {
              if ((7-vars.length) < varsn.length){addVar()};
-            document.getElementById(`var${i}`).value=varsn[i].split(": ")[1];
+            document.getElementById(`var${i+1}`).value=varsn[i].split(": ")[1];
         
         }
         template.value=templaten;

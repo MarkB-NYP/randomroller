@@ -210,8 +210,12 @@
         templaten=x.split("========")[2].split("\n")[2];
         document.getElementById('var1').value=varsn[0].split(": ")[1];
         
-         for (let i = 1; i < varsn.length-1; i++) {
-             if ((7-vars.length) < varsn.length){addVar()};
+        while (varsn.length-vars.length < 6) {
+            console.log(varsn.length-vars.length)
+            addVar();
+            
+        }
+         for (let i = 1; i < varsn.length; i++) {
             document.getElementById(`var${i+1}`).value=varsn[i].split(": ")[1];
         
         }

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-    <!--Random Roller v1.0-->
+    <!--Random Roller v1.2-->
     <!--Have fun! Make crazy stuff!-->
     <!--Copyright Mark Bosco 2022-->
 <head>
@@ -63,6 +63,27 @@
         a{
             text-decoration: underline
         }
+        
+        #overlay {
+            z-index: 100;
+            background-color:black;
+            display:none;
+              position: fixed; /* Sit on top of the page content */
+  width: 100%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+            
+        }
+        
+        #config{
+            text-align: left;
+            margin-top:70px;
+            padding:10px;
+            
+        }
     </style>
     
     </head>
@@ -70,8 +91,19 @@
 <body>
     
     <h1>Random Roller</h1>
+    <div id='overlay'>
+        
+       <textarea id="config" name="config" rows="20" cols="50">
+           
+           &lt Paste config here&gt
+        
+        </textarea>
+        <br><br>
+        <button onclick='importconfig()' href="">Import! (Will overide existing inputs.)</button>
+    </div>
     <a href="./index.html" download="RandomRoller.html">Download This Page!</a><br>
-    <a onclick='exportconfig()' href="#">Copy contents to clipboard</a>
+    <a onclick='exportconfig()' href="">Export config to clipboard</a><br>
+    <a onclick='document.getElementById("overlay").style.display="block"'>Import config</a>
     <p class="instructions">Type possible options for each variable, separated by a comma (,)</p>
     <div id='inputs'>
 
@@ -172,12 +204,28 @@
     window.scrollTo(0, document.body.scrollHeight);
     }
     
+    function importconfig(){
+        x = document.getElementById('config').value;
+        varsn=x.split("========")[1].split("\n").slice(2,-2);
+        templaten=x.split("========")[2].split("\n")[2];
+        document.getElementById('var1').value=varsn[0].split(": ")[1];
+        
+         for (let i = 2; i < varsn.length; i++) {
+             if ((7-vars.length) < varsn.length){addVar()};
+            document.getElementById(`var${i}`).value=varsn[i].split(": ")[1];
+        
+        }
+        template.value=templaten;
+    document.getElementById("overlay").style.display='none';
+    }
+    
+    
     function exportconfig(){
         template = document.getElementById('template').value;
         options = '';
                 for (let i = 0; i < taken.length; i++) {
             var varstr = document.getElementById(taken[i]).value
-            options += taken[i] + ': ' + varstr;
+            options += taken[i] + ': ' + varstr + '\n';
         
             
         }
@@ -189,6 +237,7 @@
       alert("Copied the text: " + exportstr);
         
     }
+    
     
     addVar();
     document.getElementById('var1').value='Made, By, Mark, Bosco'

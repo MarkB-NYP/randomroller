@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-    <!--Random Roller v1.2-->
+    <!--Random Roller v1.3-->
     <!--Have fun! Make crazy stuff!-->
-    <!--Copyright Mark Bosco 2022-->
+    <!--Copyright Mark Bosco 2022/2023-->
 <head>
     <meta charset="UTF-8">
     <title>Randoms Generator v1.0</title>
@@ -102,7 +102,7 @@
         <button onclick='importconfig()' href="">Import! (Will overide existing inputs.)</button>
     </div>
     <a href="./index.html" download="RandomRoller.html">Download This Page!</a><br>
-    <a onclick='exportconfig()' href="">Export config to clipboard</a><br>
+    <a onclick='exportconfig()' href='#'>Export config to clipboard</a><br>
     <a onclick='document.getElementById("overlay").style.display="block"'>Import config</a>
     <p class="instructions">Type possible options for each variable, separated by a comma (,)</p>
     <div id='inputs'>
@@ -131,8 +131,20 @@
 <script>
     var inputs = document.getElementById('inputs');
     var output = document.getElementById('output');
-    var vars = ['var1','var2','var3','var4','var5', 'var6'];
+    var vars = []
+    var varcount=0
+    
     var taken = []
+
+        function sortvars( a, b ) {
+            
+      if ( parseInt(a.slice(3,)) > parseInt(b.slice(3,)) ){
+        return 1;
+      }
+      return -1;
+    }
+
+    
     
     function createElementFromHTML(htmlString) {
   var div = document.createElement('div');
@@ -142,7 +154,10 @@
   return div.firstChild;
 }
     function addVar(){
-    vars.sort();
+        varcount += 1;
+        if (!vars.includes(`var${varcount}`)){vars.push(`var${varcount}`)}
+        
+    vars.sort(sortvars);
         const template=`<div class="paramInput" id="div#">
         <label for="#">#:</label>
         <input size="30" placeholder="#" name="#" id="#">
@@ -153,9 +168,7 @@
         taken.push(r)
         finalElement = template.replaceAll('#',r)
         inputs.append(createElementFromHTML(finalElement));
-        if (vars.length == 0){
-            document.getElementById('add').style.visibility='hidden';
-        }
+
         document.getElementById(r).focus();
     }
     
@@ -173,8 +186,7 @@
   
         document.getElementById(name1).remove()
         vars.push(name1.substr(3,));
-        document.getElementById('add').style.visibility= "visible";
-        vars.sort();
+        vars.sort(sortvars);
         
     }
     
@@ -209,25 +221,25 @@
         varsn=x.split("========")[1].split("\n").slice(2,-2);
         templaten=x.split("========")[2].split("\n")[2];
         document.getElementById('var1').value=varsn[0].split(": ")[1];
-        
-        while (varsn.length-vars.length < 6) {
-            console.log(varsn.length-vars.length)
+        varsneeded = parseInt(varsn.slice(-1,)[0].split(":")[0].slice(3,))
+        for (let i = varcount; i <= varsneeded; i++) {
             addVar();
-            
+            console.log(vars.length)
         }
          for (let i = 1; i < varsn.length; i++) {
-            document.getElementById(`var${i+1}`).value=varsn[i].split(": ")[1];
+            document.getElementById(varsn[i].split(": ")[0]).value=varsn[i].split(": ")[1];
         
         }
-        template.value=templaten;
+    template.value=templaten;
     document.getElementById("overlay").style.display='none';
+
     }
     
     
     function exportconfig(){
         template = document.getElementById('template').value;
         options = '';
-                for (let i = 0; i < taken.length; i++) {
+        for (let i = 0; i < taken.length; i++) {
             var varstr = document.getElementById(taken[i]).value
             options += taken[i] + ': ' + varstr + '\n';
         
